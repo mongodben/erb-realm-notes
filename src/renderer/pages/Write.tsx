@@ -1,31 +1,20 @@
 import React, { useState } from 'react';
 import { PageLayout, Editor, Posts } from '../components';
+// TODO: refactor to pull real data
+import dummyPosts from '../data-access/sample-posts';
 
-const dummyPosts = [
-  {
-    uid: '1',
-    title: 'my first post',
-  },
-  {
-    uid: '2',
-    title: 'my second post',
-  },
-  {
-    uid: '1',
-    title: 'my third post',
-  },
-];
 
 const Write: React.FC = () => {
-  const [currPost, setcurrPost] = useState<string | undefined>(
-    '**Hello world!!!**'
-  );
-  const [currPostId, setCurrPostId] = useState<string | undefined>('');
+  const [currPostId, setCurrPostId] = useState<string | undefined>(undefined);
+
+  function setPostId(id: string): void {
+    setCurrPostId(id);
+  }
 
   return (
     <PageLayout>
-      <Editor md={currPost} setMd={setcurrPost} title="New Page" />
-      <Posts posts={dummyPosts} setPostId={setCurrPostId} />
+      <Editor uid={currPostId} />
+      <Posts posts={dummyPosts} setPostId={setPostId} />
     </PageLayout>
   );
 };

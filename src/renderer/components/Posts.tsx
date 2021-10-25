@@ -11,11 +11,18 @@ type PostMeta = {
   uid: string;
 };
 
-const Post: React.FC<PostMeta> = ({ title, uid, setPostId }) => {
-  function setter() {
-    setPostId(uid);
+type PostMetaWithSetter = {
+  meta: PostMeta;
+  setter: (val: string) => void;
+};
+
+const Post: React.FC<PostMetaWithSetter> = ({ meta, setter }) => {
+  function setPostId() {
+    setter(meta.uid);
   }
-  return <ListGroup.Item onClick={() => setter()}>{title}</ListGroup.Item>;
+  return (
+    <ListGroup.Item onClick={() => setPostId()}>{meta.title}</ListGroup.Item>
+  );
 };
 
 const Posts: React.FC<PostsProps> = ({ posts, setPostId }) => {
@@ -24,9 +31,7 @@ const Posts: React.FC<PostsProps> = ({ posts, setPostId }) => {
       <h2>my posts</h2>
       <ListGroup>
         {posts.map((post) => {
-          return (
-            <Post title={post.title} uid={post.uid} setPostId={setPostId} />
-          );
+          return <Post meta={post} setter={setPostId} />;
         })}
       </ListGroup>
     </>
