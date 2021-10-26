@@ -15,8 +15,10 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import Realm from 'realm';
+import { UsernamePassword } from 'types/auth';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { openRealm, logIn } from './realm';
 
 export default class AppUpdater {
   constructor() {
@@ -27,6 +29,8 @@ export default class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+// TODO: refactor so the type is better here
+let realm: Promise<any> | Realm | any;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -79,7 +83,7 @@ const createWindow = async () => {
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
-  mainWindow.on('ready-to-show', () => {
+  mainWindow.on('ready-to-show', async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
@@ -88,10 +92,12 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
+    realm = await openRealm();
   });
 
-  mainWindow.on('closed', () => {
+  mainWindow.on('closed', async () => {
     mainWindow = null;
+    realm?.close();
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
@@ -115,6 +121,7 @@ const createWindow = async () => {
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
+  realm?.close();
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -134,7 +141,7 @@ app
 
 ipcMain.on('ipc-example', async (event, arg) => {
   console.log('entered on main');
-  const realm = new Realm();
+  // realm = new Realm();
   console.log('realm is closed?', realm.isClosed);
   realm.close();
   console.log('realm is closed?', realm.isClosed);
@@ -142,3 +149,19 @@ ipcMain.on('ipc-example', async (event, arg) => {
   console.log(msgTemplate(arg));
   event.returnValue = { res: 'pong' };
 });
+
+ipcMain.handle(
+  'log-in',
+  async (_: Electron.IpcMainInvokeEvent, arg: UsernamePassword) => {
+    let res;
+    try {
+      console.log('args are', arg);
+      await logIn(arg);
+      res = 'ok';
+    } catch (err) {
+      console.error('error is', err);
+      res = false;
+    }
+    return res;
+  }
+);

@@ -1,11 +1,6 @@
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import { Write, Home, LogIn, SignUp } from './pages';
 
-// const { ipcRenderer } = window.require('electron');
-// function callIpc() {
-//   console.log(ipcRenderer.sendSync('ipc-example', { msg: 'ping' }));
-// }
-
 export default function App() {
   return (
     <>

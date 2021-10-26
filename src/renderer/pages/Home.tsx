@@ -22,6 +22,15 @@ const Home = () => {
           <Button variant="secondary">Write</Button>{' '}
         </Link>
       </div>
+      <div>
+        <h2>features</h2>
+        <ul>
+          <li>work with notes locally, even when not connected to internet</li>
+          <li>sync when online</li>
+          <li>save notes by user</li>
+          <li>create, update, and delete notes</li>
+        </ul>
+      </div>
     </PageLayout>
   );
 };
