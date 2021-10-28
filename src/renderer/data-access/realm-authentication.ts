@@ -1,5 +1,5 @@
 import { UsernamePassword } from 'types/auth';
-const { ipcRenderer } = window.require('electron');
+import { ipcRendererHandler } from '../ipc';
 
 class RealmAuthentication {
   isLoggedIn: boolean;
@@ -10,10 +10,10 @@ class RealmAuthentication {
 
   async logIn(
     credentials: UsernamePassword
-  ): Promise<UsernamePassword | Error> {
+  ): Promise<UsernamePassword | null> {
     try {
-      const res: UsernamePassword = await ipcRenderer.invoke(
-        'log-in',
+      const res: UsernamePassword = await ipcRendererHandler(
+        'logIn',
         credentials
       );
       if (res) {
@@ -22,16 +22,34 @@ class RealmAuthentication {
       return res;
     } catch (err) {
       console.error('error is...', err);
-      return new Error('could not log in user');
+      return null;
     }
   }
 
-  static async logOut(): Promise<boolean | Error> {
+  async signUp(
+    credentials: UsernamePassword
+  ): Promise<UsernamePassword | null> {
     try {
-      const res: boolean = await ipcRenderer.invoke('log-out');
+      const res: UsernamePassword = await ipcRendererHandler(
+        'signUp',
+        credentials
+      );
+      if (res) {
+        this.isLoggedIn = true;
+      }
       return res;
     } catch (err) {
-      return new Error('could not log in user');
+      console.error('error is...', err);
+      return null;
+    }
+  }
+
+  static async logOut(): Promise<boolean | null> {
+    try {
+      const res: boolean = await ipcRendererHandler('log-out');
+      return res;
+    } catch (err) {
+      return null;
     }
   }
 }

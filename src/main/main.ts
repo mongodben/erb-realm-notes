@@ -15,10 +15,14 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import Realm from 'realm';
-import { UsernamePassword } from 'types/auth';
+import IpcCall from 'types/IpcCall';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { openRealm, logIn } from './realm';
+import { openRealm} from './realm';
+import { callRealm } from './ipc';
+import { app as realmApp } from './realm';
+import { realmDb } from './realm';
+
 
 export default class AppUpdater {
   constructor() {
@@ -151,16 +155,19 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 ipcMain.handle(
-  'log-in',
-  async (_: Electron.IpcMainInvokeEvent, arg: UsernamePassword) => {
+  'realmEvent',
+  async (_: Electron.IpcMainInvokeEvent, args: IpcCall) => {
+    console.log('args are', args);
+    const { event, data } = args;
+    console.log("Destructuring", event, data);
     let res;
     try {
-      console.log('args are', arg);
-      await logIn(arg);
-      res = 'ok';
+      res = await callRealm(realmApp, realmDb, event, data);
     } catch (err) {
       console.error('error is', err);
-      res = false;
+      const errorRes = new Error(`Error resolving the ipcCall: ${event}`);
+      console.error(errorRes);
+      res = "error :(";
     }
     return res;
   }

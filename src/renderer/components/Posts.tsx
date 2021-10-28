@@ -31,7 +31,7 @@ const Posts: React.FC<PostsProps> = ({ posts, setPostId }) => {
       <h2>my posts</h2>
       <ListGroup>
         {posts.map((post) => {
-          return <Post meta={post} setter={setPostId} />;
+          return <Post meta={post} setter={setPostId} key={post.uid} />;
         })}
       </ListGroup>
     </>
