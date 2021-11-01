@@ -2,6 +2,8 @@ import Realm from 'realm';
 import { UsernamePassword } from 'types/auth';
 import RealmWrapper from 'types/RealmWrapper';
 import { openRealm } from '..';
+import realmDb from '../realmDb';
+
 let loggedInRealm: any;
 async function logIn(
   app: Realm.App,
@@ -22,6 +24,8 @@ async function logIn(
     if (user) {
       loggedInUser = await app.logIn(emailPasswordUserCredentials);
       loggedInRealm = await openRealm();
+      realmDb.isOpen = true;
+      realmDb.db = loggedInRealm;
     } else {
       console.log('issues, uh oh :(');
       throw new Error('problems logging in existing user');

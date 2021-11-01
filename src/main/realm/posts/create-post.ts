@@ -26,7 +26,6 @@ function createNotes(app: Realm.App, realm: RealmWrapper, notes: Post[]) {
     }
   } else {
     throw new Error("Realm isn't open");
-    return false;
   }
 }
 

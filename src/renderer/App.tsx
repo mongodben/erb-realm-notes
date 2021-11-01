@@ -3,6 +3,7 @@ import { Post } from 'types/posts';
 import React, { useState, useContext } from 'react';
 import { Home, LogIn, SignUp, Write } from './pages';
 import Context from './Context';
+import ObjectID from 'bson-objectid';
 
 type Props = {
   component: React.FC;
@@ -24,7 +25,7 @@ const ProtectedRoute: React.FC<Props> = ({ component, path, exact, ...restOfProp
 
 export default function App() {
   const [currentPost, setCurrentPost] = useState<Post | undefined>({
-    uid: '',
+    uid: new ObjectID().id,
     title: 'new post',
     body: '# my new post'
   });

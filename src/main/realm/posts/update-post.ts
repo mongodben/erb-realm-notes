@@ -1,15 +1,39 @@
 import RealmWrapper from 'types/RealmWrapper';
-import Note from 'types/Note';
+import { Post } from 'types/posts';
+import ObjectID from 'bson-objectid';
+import app from '../app';
 
-function updateNoteById(_: Realm.App, realm: RealmWrapper, notes: Note[]) {
+function updateNoteById(_: Realm.App, realm: RealmWrapper, notes: Post[]) {
+  if (realm.db === null) throw new Error('no open realm');
+
   if (realm.isOpen) {
     const { db } = realm;
     const note = notes[0];
+    console.log('note is', note);
+
+    if (note.uid.length !== 12) {
+      const diff = 12 - note.uid.length;
+      let rest = '';
+      for (let i = 0; i < diff; i += 1) {
+        rest += 'X';
+      }
+      note.uid += rest;
+    }
     try {
       db?.write(() => {
-        const noteInDb: any = db.objects('Note').filtered(`_id == ${note.id}`);
-        noteInDb.title = note.title;
-        noteInDb.body = note.body;
+        //  upsert note
+        db.create(
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          'Note',
+          {
+            _id: new ObjectID(note.uid),
+            title: note.title,
+            body: note.body,
+            myPartition: app.currentUser?.id,
+          },
+          'modified'
+        );
       });
       return true;
     } catch (err) {
@@ -18,7 +42,6 @@ function updateNoteById(_: Realm.App, realm: RealmWrapper, notes: Note[]) {
     }
   } else {
     throw new Error("Realm isn't open");
-    return false;
   }
 }
 

@@ -1,9 +1,12 @@
+import { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useHistory, Link } from 'react-router-dom';
 import PageLayout from '../components/PageLayout';
+import Context from '../Context';
 
 const Home = () => {
   const history = useHistory();
+  const { loggedIn } = useContext(Context);
 
   return (
     <PageLayout>
@@ -12,15 +15,20 @@ const Home = () => {
         <p>take sum notez w markdown</p>
       </div>
       <div>
-        <Button variant="primary" onClick={() => history.push('/log-in')}>
-          Log In
-        </Button>{' '}
-        <Button variant="info" onClick={() => history.push('/sign-up')}>
-          Sign Up
-        </Button>{' '}
-        <Link to="/write">
-          <Button variant="secondary">Write</Button>{' '}
-        </Link>
+        {loggedIn ? (
+          <Link to="/write">
+            <Button variant="secondary">Write</Button>{' '}
+          </Link>
+        ) : (
+          <>
+            <Button variant="primary" onClick={() => history.push('/log-in')}>
+              log in
+            </Button>{' '}
+            <Button variant="info" onClick={() => history.push('/sign-up')}>
+              sign up
+            </Button>{' '}
+          </>
+        )}
       </div>
       <div>
         <h2>features</h2>

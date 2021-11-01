@@ -2,6 +2,8 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import Context from '../Context';
 
 type NavLinkProps = {
   to: string;
@@ -14,15 +16,22 @@ const NavLink = ({ to, children }: NavLinkProps) => (
 );
 
 const Header = () => {
+  const { loggedIn } = useContext(Context);
   return (
     <Navbar bg="light" expand="lg" className="mb-3">
       <Container>
-        <Navbar.Brand href="#home">md notez</Navbar.Brand>
+        <Navbar.Brand href="/">md notez</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/write">Write</NavLink>
+            {loggedIn ? (
+              <NavLink to="/write">write</NavLink>
+            ) : (
+              <>
+                <NavLink to="/log-in">log in</NavLink>
+                <NavLink to="/sign-up">sign up</NavLink>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

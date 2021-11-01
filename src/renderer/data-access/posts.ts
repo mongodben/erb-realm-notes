@@ -25,6 +25,7 @@ class PostsCrud {
 
   static async updatePost(post: Post): Promise<boolean | null> {
     try {
+      console.log('post is', post);
       const res = await ipcRendererHandler('updatePost', post);
       return res;
     } catch (err) {
@@ -36,6 +37,16 @@ class PostsCrud {
   static async deletePosts(posts: Post[]): Promise<boolean | null> {
     try {
       const res = await ipcRendererHandler('deletePosts', [posts]);
+      return res;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  static async getAllPosts(): Promise<Post[] | null> {
+    try {
+      const res = await ipcRendererHandler('getPosts');
       return res;
     } catch (err) {
       console.error(err);
