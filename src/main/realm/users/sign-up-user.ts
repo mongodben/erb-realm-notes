@@ -2,7 +2,7 @@ import Realm from 'realm';
 import { UsernamePassword } from 'types/auth';
 import RealmWrapper from 'types/RealmWrapper';
 
-async function signUp(
+async function signUpUser(
   app: Realm.App,
   _: RealmWrapper,
   credentials: UsernamePassword[]
@@ -21,4 +21,4 @@ async function signUp(
   }
 }
 
-export default signUp;
+export default signUpUser;

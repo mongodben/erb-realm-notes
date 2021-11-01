@@ -10,7 +10,7 @@ const dummyPosts = [
     body: 'Ullamcorper morbi tincidunt ornare massa eget egestas. Auctor neque vitae tempus quam pellentesque nec. Mauris a diam maecenas sed enim ut sem viverra. Hac habitasse platea dictumst quisque sagittis purus. Magnis dis parturient montes nascetur ridiculus. Urna cursus eget nunc scelerisque viverra mauris in aliquam sem. Risus ultricies tristique nulla aliquet enim tortor. A iaculis at erat pellentesque adipiscing commodo elit at. Sed id semper risus in hendrerit. Morbi non arcu risus quis varius quam quisque id diam. Massa tempor nec feugiat nisl pretium fusce. Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi.',
   },
   {
-    uid: '1',
+    uid: '3',
     title: 'my third post',
     body: 'Ullamcorper morbi tincidunt ornare massa eget egestas. Auctor neque vitae tempus quam pellentesque nec. Mauris a diam maecenas sed enim ut sem viverra. Hac habitasse platea dictumst quisque sagittis purus. Magnis dis parturient montes nascetur ridiculus. Urna cursus eget nunc scelerisque viverra mauris in aliquam sem. Risus ultricies tristique nulla aliquet enim tortor. A iaculis at erat pellentesque adipiscing commodo elit at. Sed id semper risus in hendrerit. Morbi non arcu risus quis varius quam quisque id diam. Massa tempor nec feugiat nisl pretium fusce. Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi.',
   },

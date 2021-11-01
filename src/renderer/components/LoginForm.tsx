@@ -1,18 +1,19 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useAuthentication } from '../hooks';
 import { UsernamePassword } from 'types/auth';
-import { useHistory } from 'react-router-dom';
+import Context from 'renderer/Context';
+import { Redirect } from 'react-router';
 
 const LoginForm = () => {
   const [credentials, setCredentials] = useState<UsernamePassword>({
     username: '',
     password: '',
   });
+  const {loggedIn, setLoggedIn} = useContext(Context);
 
   const auth = useAuthentication();
-  const history = useHistory();
 
   async function logIn(e: React.MouseEvent) {
     e.preventDefault();
@@ -24,7 +25,8 @@ const LoginForm = () => {
     // should prob change to smthn better and standardized for exception handling
     if (res){
       // do stuff
-      history.push("/write");
+      setLoggedIn(true);
+      console.log("logged in :)")
     } else {
       // TODO: should prob populate an error msg
     }
@@ -47,6 +49,7 @@ const LoginForm = () => {
   }
 
   return (
+    <> {loggedIn && <Redirect to="/write" />}
     <Form>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
@@ -74,6 +77,7 @@ const LoginForm = () => {
         Submit
       </Button>
     </Form>
+    </>
   );
 };
 

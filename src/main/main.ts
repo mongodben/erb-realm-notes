@@ -18,10 +18,10 @@ import Realm from 'realm';
 import IpcCall from 'types/IpcCall';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { openRealm} from './realm';
 import { callRealm } from './ipc';
 import { app as realmApp } from './realm';
 import { realmDb } from './realm';
+import { loggedInRealm } from './realm/users/log-in-user';
 
 
 export default class AppUpdater {
@@ -96,12 +96,11 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
-    realm = await openRealm();
   });
 
   mainWindow.on('closed', async () => {
     mainWindow = null;
-    realm?.close();
+    loggedInRealm?.close();
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);

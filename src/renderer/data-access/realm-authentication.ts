@@ -10,13 +10,14 @@ class RealmAuthentication {
 
   async logIn(
     credentials: UsernamePassword
-  ): Promise<UsernamePassword | null> {
+  ): Promise<boolean | null> {
     try {
-      const res: UsernamePassword = await ipcRendererHandler(
+      const res: boolean | Error = await ipcRendererHandler(
         'logIn',
         credentials
       );
-      if (res) {
+      if(res instanceof Error) throw res;
+      else if (res) {
         this.isLoggedIn = true;
       }
       return res;

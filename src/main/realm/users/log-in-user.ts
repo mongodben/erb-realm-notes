@@ -1,7 +1,8 @@
 import Realm from 'realm';
 import { UsernamePassword } from 'types/auth';
 import RealmWrapper from 'types/RealmWrapper';
-
+import { openRealm } from '..';
+let loggedInRealm: any;
 async function logIn(
   app: Realm.App,
   _: RealmWrapper,
@@ -18,10 +19,15 @@ async function logIn(
   console.log('realm credentials are', emailPasswordUserCredentials);
   let loggedInUser;
   try {
-    if (user && user.isLoggedIn) {
-      loggedInUser = await user?.linkCredentials(emailPasswordUserCredentials);
-    } else throw new Error('problems logging in existing user');
-    return loggedInUser;
+    if (user) {
+      loggedInUser = await app.logIn(emailPasswordUserCredentials);
+      loggedInRealm = await openRealm();
+    } else {
+      console.log('issues, uh oh :(');
+      throw new Error('problems logging in existing user');
+    }
+    console.log('user is...', loggedInUser);
+    return true;
   } catch (err) {
     console.error('log in error is...', err);
     return err;
@@ -29,3 +35,4 @@ async function logIn(
 }
 
 export default logIn;
+export {loggedInRealm};

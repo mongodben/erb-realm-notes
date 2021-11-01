@@ -1,37 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { getPostById } from 'renderer/data-access';
+import { PostsProps, PostMeta } from 'types/posts';
+import Context from '../Context';
 
-type PostsProps = {
-  posts: PostMeta[];
-  setPostId: (val: string) => void;
-};
+const Post: React.FC<PostMeta> = ({ uid, title }) => {
+  const { setCurrentPost } = useContext(Context);
 
-type PostMeta = {
-  title: string;
-  uid: string;
-};
-
-type PostMetaWithSetter = {
-  meta: PostMeta;
-  setter: (val: string) => void;
-};
-
-const Post: React.FC<PostMetaWithSetter> = ({ meta, setter }) => {
   function setPostId() {
-    setter(meta.uid);
+    const post = getPostById(uid);
+    setCurrentPost(post);
   }
-  return (
-    <ListGroup.Item onClick={() => setPostId()}>{meta.title}</ListGroup.Item>
-  );
+  return <ListGroup.Item onClick={() => setPostId()}>{title}</ListGroup.Item>;
 };
 
-const Posts: React.FC<PostsProps> = ({ posts, setPostId }) => {
+const Posts: React.FC<PostsProps> = ({ posts }) => {
   return (
     <>
       <h2>my posts</h2>
       <ListGroup>
         {posts.map((post) => {
-          return <Post meta={post} setter={setPostId} key={post.uid} />;
+          return (
+            <Post
+              uid={post.uid}
+              title={post.title}
+              key={`${post.uid}_${post.title}`}
+            />
+          );
         })}
       </ListGroup>
     </>
