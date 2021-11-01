@@ -6,6 +6,7 @@ import { PostsCrud } from 'renderer/data-access';
 import Context from 'renderer/Context';
 import { Post } from 'types/posts';
 import ObjectID from 'bson-objectid';
+import { FaCheck } from 'react-icons/fa'
 
 type TitleFormProps = {
   editTitleStateChangeHandle: (newState: boolean) => void;
@@ -41,14 +42,14 @@ const TitleForm: React.FC<TitleFormProps> = ({
         />
       </Form.Group>
       <Button variant="primary" onClick={handleEditingTitle}>
-        finish editing title
+        <FaCheck />
       </Button>
     </Form>
   );
 };
 
 const MetaEditor: React.FC = () => {
-  const { currentPost, setCurrentPost } = useContext(Context);
+  const { currentPost, setCurrentPost, causeRefresh } = useContext(Context);
 
   const [editingTitle, setEditingTitle] = useState(false);
 
@@ -67,6 +68,7 @@ const MetaEditor: React.FC = () => {
 
   function savePost() {
     PostsCrud.updatePost(currentPost);
+    causeRefresh();
     alert(`saved your post: ${currentPost.title}`);
   }
   function deletePost() {

@@ -30,9 +30,17 @@ export default function App() {
     body: '# my new post'
   });
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<string>("");
+
+  function causeRefresh(){
+    const timestamp = new Date().getTime().toString();
+    setRefresh(timestamp);
 
 
-  const context = { currentPost, setCurrentPost, loggedIn, setLoggedIn };
+  }
+
+  const context = { currentPost, setCurrentPost, loggedIn, setLoggedIn, refresh, causeRefresh };
+
   return (
     <>
       <link
