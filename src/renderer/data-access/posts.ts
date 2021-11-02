@@ -20,7 +20,6 @@ class PostsCrud {
 
   static async updatePost(post: Post): Promise<boolean | null> {
     try {
-      console.log('post is', post);
       const res = await ipcRendererHandler('updatePost', post);
       return res;
     } catch (err) {

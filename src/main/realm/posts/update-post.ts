@@ -9,8 +9,6 @@ function updateNoteById(_: Realm.App, realm: RealmWrapper, notes: Post[]) {
   if (realm.isOpen) {
     const { db } = realm;
     const note = notes[0];
-    console.log('note is', note);
-
     if (note.uid.length !== 12) {
       const diff = 12 - note.uid.length;
       let rest = '';

@@ -17,18 +17,10 @@ const SignUpForm = () => {
   async function logIn(e: React.MouseEvent) {
     e.preventDefault();
     const res = await auth.signUp(credentials);
-    // TODO: implement logic on successful login
-    // and logic when login doesn't work
-    // note: check what the value of res is, i think it's 'ok' for now if
-    // success. but not sure if fail.
-    // should prob change to smthn better and standardized for exception handling
     console.log(res)
     if (res){
-      // do stuff
       alert("ty for signing up. now time to log in")
       history.push("/log-in");
-    } else {
-      // TODO: should prob populate an error msg
     }
   }
 

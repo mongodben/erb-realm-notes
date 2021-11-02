@@ -19,15 +19,8 @@ const Editor: React.FC = () => {
   const [localPost, setLocalPost] = useState<string>(currentPost.body);
 
   useEffect(() => {
-    console.log('entered useEffect');
     setLocalPost(currentPost.body);
   }, [currentPost.uid, currentPost.body, currId]);
-
-  // function updatePost(currentBody: string): void {
-  //   const newPost = { ...currentPost };
-  //   newPost.body = currentBody;
-  //   setCurrentPost(newPost);
-  // }
 
   const handleChange = (curr: string) => {
     if (!unsavedChanges) {

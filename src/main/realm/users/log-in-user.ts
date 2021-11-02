@@ -13,12 +13,10 @@ async function logIn(
   const user = app.currentUser;
   // const user = app.currentUser;
   const creds = credentials[0];
-  console.log('creds are', creds);
   const emailPasswordUserCredentials = Realm.Credentials.emailPassword(
     creds.username,
     creds.password
   );
-  console.log('realm credentials are', emailPasswordUserCredentials);
   let loggedInUser;
   try {
     if (user) {
@@ -27,10 +25,8 @@ async function logIn(
       realmDb.isOpen = true;
       realmDb.db = loggedInRealm;
     } else {
-      console.log('issues, uh oh :(');
       throw new Error('problems logging in existing user');
     }
-    console.log('user is...', loggedInUser);
     return true;
   } catch (err) {
     console.error('log in error is...', err);

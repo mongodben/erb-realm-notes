@@ -3,7 +3,6 @@ import { PostsCrud } from 'renderer/data-access';
 import { Post } from 'types/posts';
 import { PageLayout, Editor, Posts, MetaEditor } from '../components';
 import Context from '../Context';
-// TODO: refactor to pull real data
 
 const Write: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -12,9 +11,7 @@ const Write: React.FC = () => {
   useEffect(() => {
     (async function() {
       const dbPosts = await PostsCrud.getAllPosts();
-      console.log('db posts are', dbPosts)
       setPosts(dbPosts || []);
-
     }
     )();
   }, [refresh]);

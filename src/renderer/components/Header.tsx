@@ -26,7 +26,6 @@ const Header = () => {
     e.preventDefault();
     try {
       const res = await auth.logOut();
-      console.log('log out res is', res);
       if (res) {
         history.push('/');
         setLoggedIn(false);

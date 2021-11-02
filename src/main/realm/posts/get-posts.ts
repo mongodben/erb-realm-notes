@@ -7,8 +7,6 @@ function getPosts(_: Realm.App, realm: RealmWrapper, __: Post[]) {
   }
   const { db } = realm;
   const dbNotes = db?.objects('Note') || [];
-  console.log('num notes in the database is', dbNotes.length);
-  console.log('array from db notes', Array.from(dbNotes));
   const posts = Array.from(dbNotes).map((note) => {
     const noteJsObj = JSON.parse(JSON.stringify(note));
     // eslint-disable-next-line no-underscore-dangle
@@ -16,7 +14,6 @@ function getPosts(_: Realm.App, realm: RealmWrapper, __: Post[]) {
     delete noteJsObj.myPartition;
     return noteJsObj;
   });
-  console.log('POJO posts are', posts);
   return posts;
 }
 
