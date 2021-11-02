@@ -22,26 +22,31 @@ const ProtectedRoute: React.FC<Props> = ({ component, path, exact, ...restOfProp
   }
 }
 
-
-export default function App() {
-  const [currentPost, setCurrentPost] = useState<Post | undefined>({
+function createNewPost() {
+  return {
     uid: new ObjectID().id,
     title: 'new post',
     body: '# my new post'
-  });
+  }
+}
+
+export default function App() {
+  const [currentPost, setCurrentPost] = useState<Post | undefined>(createNewPost());
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<string>("");
 
-  function causeRefresh(){
+  function causeRefresh() {
     const timestamp = new Date().getTime().toString();
     setRefresh(timestamp);
+  }
 
-
+  function resetCurrentPost() {
+    setCurrentPost(createNewPost());
   }
 
   const context = { currentPost, setCurrentPost, loggedIn, setLoggedIn, refresh,
-    causeRefresh, unsavedChanges, setUnsavedChanges };
+    causeRefresh, unsavedChanges, setUnsavedChanges, resetCurrentPost };
 
   return (
     <>

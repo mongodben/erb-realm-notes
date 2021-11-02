@@ -55,6 +55,7 @@ const MetaEditor: React.FC = () => {
     causeRefresh,
     unsavedChanges,
     setUnsavedChanges,
+    resetCurrentPost,
   } = useContext(Context);
 
   const [editingTitle, setEditingTitle] = useState(false);
@@ -84,8 +85,11 @@ const MetaEditor: React.FC = () => {
 
   const deletePost = () => {
     setUnsavedChanges(false);
-    PostsCrud.deletePosts(currentPost);
+    const oldTitle = currentPost.title;
+    PostsCrud.deletePosts([currentPost.uid]);
+    resetCurrentPost();
     causeRefresh();
+    alert(`deleted post: ${oldTitle}`);
   };
 
   return (

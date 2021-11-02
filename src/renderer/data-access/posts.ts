@@ -1,12 +1,7 @@
 import { Post } from 'types/posts';
 import { ipcRendererHandler } from 'renderer/ipc';
-import samplePosts from './sample-posts';
 
 class PostsCrud {
-  static async getPostById(uid: string): Promise<Post | undefined> {
-    return samplePosts.find((el) => el.uid === uid);
-  }
-
   static async createPost(): Promise<boolean | null> {
     const post: Post = {
       uid: '',
@@ -34,9 +29,9 @@ class PostsCrud {
     }
   }
 
-  static async deletePosts(posts: Post[]): Promise<boolean | null> {
+  static async deletePosts(postIds: string[]): Promise<boolean | null> {
     try {
-      const res = await ipcRendererHandler('deletePosts', [posts]);
+      const res = await ipcRendererHandler('deletePosts', postIds);
       return res;
     } catch (err) {
       console.error(err);
