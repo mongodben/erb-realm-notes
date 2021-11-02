@@ -17,10 +17,9 @@ async function logIn(
     creds.username,
     creds.password
   );
-  let loggedInUser;
   try {
     if (user) {
-      loggedInUser = await app.logIn(emailPasswordUserCredentials);
+      await app.logIn(emailPasswordUserCredentials);
       loggedInRealm = await openRealm();
       realmDb.isOpen = true;
       realmDb.db = loggedInRealm;
