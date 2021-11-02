@@ -6,7 +6,7 @@ import { PostsCrud } from 'renderer/data-access';
 import Context from 'renderer/Context';
 import { Post } from 'types/posts';
 import ObjectID from 'bson-objectid';
-import { FaCheck } from 'react-icons/fa'
+import { FaCheck } from 'react-icons/fa';
 
 type TitleFormProps = {
   editTitleStateChangeHandle: (newState: boolean) => void;
@@ -17,18 +17,18 @@ const TitleForm: React.FC<TitleFormProps> = ({
 }: TitleFormProps) => {
   const { currentPost, setCurrentPost } = useContext(Context);
 
-  function handleChange(e: React.ChangeEvent<any>) {
+  const handleChange = (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     const newTitle = e.target.value;
     const newCurrentPost = { ...currentPost };
     newCurrentPost.title = newTitle;
     setCurrentPost(newCurrentPost);
-  }
+  };
 
-  function handleEditingTitle(e: React.ChangeEvent<any>) {
+  const handleEditingTitle = (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     editTitleStateChangeHandle(false);
-  }
+  };
 
   return (
     <Form>
@@ -49,31 +49,44 @@ const TitleForm: React.FC<TitleFormProps> = ({
 };
 
 const MetaEditor: React.FC = () => {
-  const { currentPost, setCurrentPost, causeRefresh } = useContext(Context);
+  const {
+    currentPost,
+    setCurrentPost,
+    causeRefresh,
+    unsavedChanges,
+    setUnsavedChanges,
+  } = useContext(Context);
 
   const [editingTitle, setEditingTitle] = useState(false);
 
-  function createPost() {
+  const createPost = () => {
     const emptyPost: Post = {
       uid: new ObjectID().id,
       title: 'new post',
       body: '# my new post',
     };
     setCurrentPost(emptyPost);
+    setUnsavedChanges(true);
     PostsCrud.createPost();
-  }
-  function editTitle() {
-    setEditingTitle(true);
-  }
+  };
 
-  function savePost() {
+  const editTitle = () => {
+    setEditingTitle(true);
+    setUnsavedChanges(true);
+  };
+
+  const savePost = () => {
     PostsCrud.updatePost(currentPost);
+    setUnsavedChanges(false);
     causeRefresh();
     alert(`saved your post: ${currentPost.title}`);
-  }
-  function deletePost() {
+  };
+
+  const deletePost = () => {
+    setUnsavedChanges(false);
     PostsCrud.deletePosts(currentPost);
-  }
+    causeRefresh();
+  };
 
   return (
     <>
@@ -88,7 +101,7 @@ const MetaEditor: React.FC = () => {
       )}
 
       <ButtonGroup aria-label="Basic example">
-        <Button variant="secondary" onClick={editTitle}>
+        <Button variant="secondary" onClick={editTitle} disabled={editingTitle}>
           edit title
         </Button>
         <Button variant="secondary" onClick={savePost}>
@@ -98,6 +111,9 @@ const MetaEditor: React.FC = () => {
           delete
         </Button>
       </ButtonGroup>
+      <div>
+        {unsavedChanges && <span className="text-danger">unsaved changes</span>}
+      </div>
     </>
   );
 };

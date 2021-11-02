@@ -12,7 +12,7 @@ const converter = new Showdown.Converter({
 });
 
 const Editor: React.FC = () => {
-  const { currentPost, setCurrentPost } = useContext(Context);
+  const { currentPost, setCurrentPost, unsavedChanges, setUnsavedChanges } = useContext(Context);
   const currId = currentPost.uid;
 
   const [selectedTab, setSelectedTab] = useState<'write' | 'preview'>('write');
@@ -29,11 +29,14 @@ const Editor: React.FC = () => {
   //   setCurrentPost(newPost);
   // }
 
-  function handleChange(curr: string) {
+  const handleChange = (curr: string) => {
+    if (!unsavedChanges) {
+      setUnsavedChanges(true);
+    }
     const newCurrentPost = { ...currentPost };
     newCurrentPost.body = curr;
     setCurrentPost(newCurrentPost);
-  }
+  };
 
   return (
     <>

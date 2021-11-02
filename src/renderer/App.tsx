@@ -30,6 +30,7 @@ export default function App() {
     body: '# my new post'
   });
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<string>("");
 
   function causeRefresh(){
@@ -39,7 +40,8 @@ export default function App() {
 
   }
 
-  const context = { currentPost, setCurrentPost, loggedIn, setLoggedIn, refresh, causeRefresh };
+  const context = { currentPost, setCurrentPost, loggedIn, setLoggedIn, refresh,
+    causeRefresh, unsavedChanges, setUnsavedChanges };
 
   return (
     <>
