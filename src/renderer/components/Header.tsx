@@ -1,8 +1,10 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import Button from 'react-bootstrap/Button';
+import { Link, useHistory } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useAuthentication } from 'renderer/hooks';
 import Context from '../Context';
 
 type NavLinkProps = {
@@ -16,7 +18,26 @@ const NavLink = ({ to, children }: NavLinkProps) => (
 );
 
 const Header = () => {
-  const { loggedIn } = useContext(Context);
+  const { loggedIn, setLoggedIn } = useContext(Context);
+  const auth = useAuthentication();
+  const history = useHistory();
+
+  async function handleLogOut(e: React.ChangeEvent<any>) {
+    e.preventDefault();
+    try {
+      const res = await auth.logOut();
+      console.log('log out res is', res);
+      if (res) {
+        history.push('/');
+        setLoggedIn(false);
+        alert('logged out');
+      } else throw new Error("can't log out");
+    } catch (err) {
+      console.error(err);
+      alert('problem logging out :(');
+    }
+  }
+
   return (
     <Navbar bg="light" expand="lg" className="mb-3">
       <Container>
@@ -25,7 +46,12 @@ const Header = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             {loggedIn ? (
-              <NavLink to="/write">write</NavLink>
+              <>
+                <NavLink to="/write">write</NavLink>
+                <Button onClick={handleLogOut} onKeyDown={handleLogOut}>
+                  log out
+                </Button>
+              </>
             ) : (
               <>
                 <NavLink to="/log-in">log in</NavLink>

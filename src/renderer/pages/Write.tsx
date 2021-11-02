@@ -12,6 +12,7 @@ const Write: React.FC = () => {
   useEffect(() => {
     (async function() {
       const dbPosts = await PostsCrud.getAllPosts();
+      console.log('db posts are', dbPosts)
       setPosts(dbPosts || []);
 
     }

@@ -1,5 +1,6 @@
 import RealmWrapper from 'types/RealmWrapper';
 import logIn from './users/log-in-user';
+import logOut from './users/log-out-user';
 import signUp from './users/sign-up-user';
 import createPost from './posts/create-post';
 import deletePosts from './posts/delete-posts';
@@ -12,6 +13,7 @@ type Map = {
 
 const realmIpcCalls: Map = {
   logIn,
+  logOut,
   signUp,
   createPost,
   deletePosts,

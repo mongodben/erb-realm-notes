@@ -45,9 +45,9 @@ class RealmAuthentication {
     }
   }
 
-  static async logOut(): Promise<boolean | null> {
+  async logOut(): Promise<boolean | null> {
     try {
-      const res: boolean = await ipcRendererHandler('log-out');
+      const res: boolean = await ipcRendererHandler('logOut');
       return res;
     } catch (err) {
       return null;

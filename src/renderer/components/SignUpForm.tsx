@@ -22,9 +22,11 @@ const SignUpForm = () => {
     // note: check what the value of res is, i think it's 'ok' for now if
     // success. but not sure if fail.
     // should prob change to smthn better and standardized for exception handling
+    console.log(res)
     if (res){
       // do stuff
-      history.push("/write");
+      alert("ty for signing up. now time to log in")
+      history.push("/log-in");
     } else {
       // TODO: should prob populate an error msg
     }
