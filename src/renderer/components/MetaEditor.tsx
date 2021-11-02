@@ -9,11 +9,11 @@ import ObjectID from 'bson-objectid';
 import { FaCheck } from 'react-icons/fa';
 
 type TitleFormProps = {
-  editTitleStateChangeHandle: (newState: boolean) => void;
+  editTitleStateChangeHandler: (newState: boolean) => void;
 };
 
 const TitleForm: React.FC<TitleFormProps> = ({
-  editTitleStateChangeHandle,
+  editTitleStateChangeHandler,
 }: TitleFormProps) => {
   const { currentPost, setCurrentPost } = useContext(Context);
 
@@ -27,7 +27,7 @@ const TitleForm: React.FC<TitleFormProps> = ({
 
   const handleEditingTitle = (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    editTitleStateChangeHandle(false);
+    editTitleStateChangeHandler(false);
   };
 
   return (
@@ -99,7 +99,7 @@ const MetaEditor: React.FC = () => {
       </Button>
 
       {editingTitle ? (
-        <TitleForm editTitleStateChangeHandle={setEditingTitle} />
+        <TitleForm editTitleStateChangeHandler={setEditingTitle} />
       ) : (
         <h2>{currentPost?.title || 'new post'}</h2>
       )}
