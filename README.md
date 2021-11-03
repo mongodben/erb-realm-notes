@@ -26,6 +26,10 @@ cd ../..
 yarn start 
 ```
 
+Notes:
+
+* The renderer process has hot refresh, but the main process requires killing and restarting the process for code updates
+
 ### Application Architecture
 
 MD Notes roughly follows a model-view-controller design pattern. The component parts are:
@@ -50,10 +54,66 @@ In the future, the application may be refactored to use Realm from the Renderer 
 
 To communicate between the renderer and Realm, you must do the following:
 1. Create a function in the Main process for handling Realm data
-2. Add the function to `ipcCalls.ts`
-3. Call the function from the Renderer using `ipcRendererHandler`
+2. Add the function to known IPC call list
+3. Call the function from the Renderer
 
-<!-- TODO(Ben): expand on how this process works -->
+#### 1. Create a function in the Main process for handling Realm data
+
+Create a function to handle Realm data in the Main process folder `src/main/realm`.
+
+The function should have the arguments:
+
+```ts
+function myRealmFunction(app: Realm.App, realm: RealmWrapper, args: any[]): any {
+// ...my code
+}
+```
+
+Notes:
+
+* If the function doesn't have this shape, TypeScript throws an error.
+* If you're not using any of the arguments, replace them with `_`, `__` ...
+* The `app` and `realm` arguments are invoked by `ipcMain.handle('realmEvent', ...)`. 
+
+#### 2. Add function to known IPC call list
+
+After creating the realm Function, add it to the list of known IPC calls. This list is found in the file `src/main/realm/ipcCalls.ts`. Only Realm IPC calls added to this list can be invoked from the Renderer process without writing additional handler code.
+
+In `src/main/realm/ipcCalls.ts`:
+
+```ts
+import myRealmFunction from './path/to/file'
+
+const realmIpcCalls: Map = {
+  // other Realm functions
+  myRealmFunction,
+  // other Realm functions
+};
+
+export default realmIpcCalls;
+```
+
+#### 3. Call the function from the Renderer
+
+From within the Renderer process, call the Realm function in the main process using the helper method `ipcRendererHandler` defined in `src/renderer/ipc/index/ts`. 
+
+The function has the following shape:
+
+```ts
+async function ipcRendererHandler(event: string, ...args: any[]): Promise<any> {
+
+```
+
+To call the function:
+
+```ts
+const res = await ipcRendererHandler('myRealmFunction', foo, bar);
+```
+
+Notes:
+
+* The function is async, and should be used with await/Promises
+* The event parameter should match the name of the Realm function defined in the main process and included in ipcCalls.ts.
 
 ## Contributors
 
